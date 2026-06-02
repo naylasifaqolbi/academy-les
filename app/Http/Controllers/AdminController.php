@@ -4,21 +4,120 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Siswa;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
-    // dashboard admin
-    public function index()
+    // DASHBOARD ADMIN
+    public function index(Request $request)
     {
-        $siswas = Siswa::latest()->get();
+        $query = Siswa::query();
+
+        // Search
+        if ($request->search) {
+
+            $query->where(
+                'nama_anak',
+                'like',
+                '%' . $request->search . '%'
+            );
+
+        }
+
+        // Filter
+        if ($request->status) {
+
+            $query->where(
+                'status',
+                $request->status
+            );
+
+        }
+
+    $siswas = $query
+        ->latest()
+        ->get();
+
+    $totalSiswa = Siswa::count();
+
+    $pending = Siswa::where(
+        'status',
+        'pending'
+    )->count();
+
+    $diterima = Siswa::where(
+        'status',
+        'diterima'
+    )->count();
+
+    $ditolak = Siswa::where(
+        'status',
+        'ditolak'
+    )->count();
+
+    return view(
+        'admin.dashboard',
+        compact(
+            'siswas',
+            'totalSiswa',
+            'pending',
+            'diterima',
+            'ditolak'
+        )
+    );
+}
+    // DATA SISWA
+    public function dataSiswa(Request $request)
+    {
+        $query = Siswa::query();
+
+        // Search
+        if ($request->search) {
+
+            $query->where(
+                'nama_anak',
+                'like',
+                '%' . $request->search . '%'
+            );
+
+        }
+
+        // Filter Status
+        if ($request->status) {
+
+            $query->where(
+                'status',
+                $request->status
+            );
+
+        }
+
+        $siswas = $query
+            ->latest()
+            ->get();
 
         return view(
-            'admin.dashboard',
+            'admin.siswa',
             compact('siswas')
         );
     }
 
-    // detail
+    // EXPORT PDF
+    public function exportPdf()
+    {
+        $siswas = Siswa::all();
+
+        $pdf = Pdf::loadView(
+            'admin.pdf',
+            compact('siswas')
+        );
+
+        return $pdf->download(
+            'laporan-siswa-academy-les.pdf'
+        );
+    }
+
+    // DETAIL
     public function detail($id)
     {
         $siswa = Siswa::findOrFail($id);
@@ -29,7 +128,7 @@ class AdminController extends Controller
         );
     }
 
-    // edit
+    // EDIT
     public function edit($id)
     {
         $siswa = Siswa::findOrFail($id);
@@ -40,52 +139,35 @@ class AdminController extends Controller
         );
     }
 
-    // update
-    public function update(
-        Request $request,
-        $id
-    ) {
+    // UPDATE
+    public function update(Request $request, $id)
+    {
         $siswa = Siswa::findOrFail($id);
 
         $siswa->update([
-            'nama_anak' =>
-                $request->nama_anak,
 
-            'nama_orang_tua' =>
-                $request->nama_orang_tua,
+            'nama_anak' => $request->nama_anak,
+            'nama_orang_tua' => $request->nama_orang_tua,
+            'email' => $request->email,
+            'no_hp' => $request->no_hp,
+            'alamat' => $request->alamat,
+            'jenjang' => $request->jenjang,
+            'mata_pelajaran' => $request->mata_pelajaran,
+            'jenis_kelamin' => $request->jenis_kelamin,
 
-            'email' =>
-                $request->email,
-
-            'no_hp' =>
-                $request->no_hp,
-
-            'alamat' =>
-                $request->alamat,
-
-            'jenjang' =>
-                $request->jenjang,
-
-            'mata_pelajaran' =>
-                $request->mata_pelajaran,
-
-            'jenis_kelamin' =>
-                $request->jenis_kelamin,
         ]);
 
-        return redirect(
-            '/admin/dashboard'
-        )->with(
-            'success',
-            'Data berhasil diupdate'
-        );
+        return redirect('/admin/siswa')
+            ->with(
+                'success',
+                'Data berhasil diupdate'
+            );
     }
 
-    // hapus
+    // HAPUS
     public function destroy($id)
     {
-        Siswa::findOrFail($id)
-            ->delete();
+        Siswa::findOrFail($id)->delete();
 
         return back()->with(
             'success',
@@ -93,19 +175,18 @@ class AdminController extends Controller
         );
     }
 
-    // terima / tolak
-    public function updateStatus(
-        Request $request,
-        $id
-    ) {
-        $siswa =
-            Siswa::findOrFail($id);
+    // UPDATE STATUS
+    public function updateStatus(Request $request, $id)
+    {
+        $siswa = Siswa::findOrFail($id);
 
         $siswa->update([
-            'status' =>
-                $request->status
+            'status' => $request->status
         ]);
 
-        return back();
+        return back()->with(
+            'success',
+            'Status berhasil diperbarui'
+        );
     }
 }

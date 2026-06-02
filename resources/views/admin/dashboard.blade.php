@@ -2,175 +2,233 @@
 
 @section('content')
 
-<div class="p-8">
+<div class="flex justify-between items-center mb-8">
 
-    <h1 class="text-3xl font-bold mb-6">
-        Dashboard Admin
-    </h1>
+    <div>
 
-    <div class="bg-white rounded-2xl shadow p-5 overflow-x-auto">
+        <h1 class="text-4xl font-bold text-slate-800">
+            Dashboard Admin
+        </h1>
 
-        <table class="w-full border">
+        <p class="text-gray-500 mt-1">
+            Kelola data pendaftaran Academy Les
+        </p>
 
-            <thead class="bg-sky-500 text-white">
+    </div>
 
-                <tr>
-                    <th class="p-3">
-                        No
-                    </th>
+    <div class="flex gap-3">
 
-                    <th class="p-3">
-                        Nama Anak
-                    </th>
+        <a href="/admin/pdf"
+           class="bg-red-500 hover:bg-red-600 text-white px-5 py-3 rounded-xl shadow transition">
 
-                    <th class="p-3">
-                        Jenjang
-                    </th>
+            📄 Export PDF
 
-                    <th class="p-3">
-                        Mapel
-                    </th>
+        </a>
 
-                    <th class="p-3">
-                        Status
-                    </th>
+        <div class="bg-sky-100 text-sky-700 px-5 py-3 rounded-2xl font-semibold shadow">
 
-                    <th class="p-3">
-                        Aksi
-                    </th>
-                </tr>
+            Total Data : {{ $totalSiswa }}
 
-            </thead>
-
-            <tbody>
-
-                @foreach($siswas as $siswa)
-
-                <tr class="border-b">
-
-                    <td class="p-3">
-                        {{ $loop->iteration }}
-                    </td>
-
-                    <td class="p-3">
-                        {{ $siswa->nama_anak }}
-                    </td>
-
-                    <td class="p-3">
-                        {{ $siswa->jenjang }}
-                    </td>
-
-                    <td class="p-3">
-                        {{ $siswa->mata_pelajaran }}
-                    </td>
-
-                    <td class="p-3">
-
-                        @if($siswa->status == 'pending')
-                            ⏳ Pending
-                        @elseif($siswa->status == 'diterima')
-                            ✅ Diterima
-                        @else
-                            ❌ Ditolak
-                        @endif
-
-                    </td>
-
-                    <td class="p-3 space-x-2">
-
-                        <!-- DETAIL -->
-                        <a href="/admin/detail/{{ $siswa->id }}"
-                           class="bg-blue-500 text-white px-3 py-1 rounded">
-
-                            Detail
-
-                        </a>
-
-                        <!-- EDIT -->
-                        <a href="/admin/edit/{{ $siswa->id }}"
-                           class="bg-yellow-500 text-white px-3 py-1 rounded">
-
-                            Edit
-
-                        </a>
-
-                        <!-- DELETE -->
-                        <form
-    action="/admin/delete/{{ $siswa->id }}"
-    method="POST"
-    class="inline">
-
-    @csrf
-    @method('DELETE')
-
-    <button
-        type="submit"
-        onclick="return confirm(
-            'Apakah yakin ingin menghapus data ini?\n\nKlik OK untuk hapus atau Cancel untuk batal.'
-        )"
-        class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition">
-
-        Hapus
-
-    </button>
-
-</form>
-
-                        <!-- STATUS -->
-                        <form
-                            action="/admin/status/{{ $siswa->id }}"
-                            method="POST"
-                            class="inline">
-
-                            @csrf
-                            @method('PUT')
-
-                            <input
-                                type="hidden"
-                                name="status"
-                                value="diterima">
-
-                            <button
-                                class="bg-green-500 text-white px-3 py-1 rounded">
-
-                                Terima
-
-                            </button>
-                        </form>
-
-                        <form
-                            action="/admin/status/{{ $siswa->id }}"
-                            method="POST"
-                            class="inline">
-
-                            @csrf
-                            @method('PUT')
-
-                            <input
-                                type="hidden"
-                                name="status"
-                                value="ditolak">
-
-                            <button
-                                class="bg-gray-500 text-white px-3 py-1 rounded">
-
-                                Tolak
-
-                            </button>
-                        </form>
-
-                    </td>
-
-                </tr>
-
-                @endforeach
-
-            </tbody>
-
-        </table>
+        </div>
 
     </div>
 
 </div>
+
+<!-- STATISTIK -->
+<div class="grid md:grid-cols-4 gap-6 mb-8">
+
+    <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-3xl shadow-lg">
+
+        <p class="opacity-80">
+            Total Siswa
+        </p>
+
+        <h2 class="text-4xl font-bold mt-2">
+            {{ $totalSiswa }}
+        </h2>
+
+    </div>
+
+    <div class="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white p-6 rounded-3xl shadow-lg">
+
+        <p class="opacity-80">
+            Pending
+        </p>
+
+        <h2 class="text-4xl font-bold mt-2">
+            {{ $pending }}
+        </h2>
+
+    </div>
+
+    <div class="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-3xl shadow-lg">
+
+        <p class="opacity-80">
+            Diterima
+        </p>
+
+        <h2 class="text-4xl font-bold mt-2">
+            {{ $diterima }}
+        </h2>
+
+    </div>
+
+    <div class="bg-gradient-to-r from-red-500 to-red-600 text-white p-6 rounded-3xl shadow-lg">
+
+        <p class="opacity-80">
+            Ditolak
+        </p>
+
+        <h2 class="text-4xl font-bold mt-2">
+            {{ $ditolak }}
+        </h2>
+
+    </div>
+
+</div>
+
+<!-- CHART DAN RINGKASAN -->
+<div class="grid md:grid-cols-2 gap-6">
+
+    <div class="bg-white p-6 rounded-3xl shadow-lg">
+
+        <h2 class="text-xl font-bold mb-4 text-slate-700">
+            Grafik Status Pendaftaran
+        </h2>
+
+        <div class="max-w-sm mx-auto">
+            <canvas id="statusChart"></canvas>
+        </div>
+
+    </div>
+
+    <div class="bg-white p-6 rounded-3xl shadow-lg">
+
+        <h2 class="text-xl font-bold mb-4 text-slate-700">
+            Ringkasan Data
+        </h2>
+
+        <div class="space-y-4">
+
+            <div class="flex justify-between border-b pb-2">
+
+                <span>Total Siswa</span>
+
+                <strong>
+                    {{ $totalSiswa }}
+                </strong>
+
+            </div>
+
+            <div class="flex justify-between border-b pb-2">
+
+                <span>Pending</span>
+
+                <strong class="text-yellow-500">
+                    {{ $pending }}
+                </strong>
+
+            </div>
+
+            <div class="flex justify-between border-b pb-2">
+
+                <span>Diterima</span>
+
+                <strong class="text-green-500">
+                    {{ $diterima }}
+                </strong>
+
+            </div>
+
+            <div class="flex justify-between">
+
+                <span>Ditolak</span>
+
+                <strong class="text-red-500">
+                    {{ $ditolak }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const ctx = document.getElementById('statusChart');
+
+new Chart(ctx, {
+
+    type: 'doughnut',
+
+    data: {
+
+        labels: [
+            'Pending',
+            'Diterima',
+            'Ditolak'
+        ],
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const ctx = document.getElementById('statusChart');
+
+new Chart(ctx, {
+
+    type: 'doughnut',
+
+    data: {
+
+        labels: [
+            'Pending',
+            'Diterima',
+            'Ditolak'
+        ],
+
+        datasets: [{
+
+            data: [
+                {{ $pending }},
+                {{ $diterima }},
+                {{ $ditolak }}
+            ],
+
+            backgroundColor: [
+                '#FACC15', // Kuning
+                '#22C55E', // Hijau
+                '#EF4444'  // Merah
+            ],
+
+            borderWidth: 2
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        plugins: {
+
+            legend: {
+                position: 'bottom'
+            }
+
+        }
+
+    }
+
+});
+
+</script>
 
 @endsection
