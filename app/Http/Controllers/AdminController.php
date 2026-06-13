@@ -67,39 +67,46 @@ class AdminController extends Controller
     );
 }
     // DATA SISWA
-    public function dataSiswa(Request $request)
+     public function dataSiswa(Request $request)
     {
         $query = Siswa::query();
 
         // Search
         if ($request->search) {
-
             $query->where(
                 'nama_anak',
                 'like',
                 '%' . $request->search . '%'
             );
-
         }
 
         // Filter Status
         if ($request->status) {
-
-            $query->where(
-                'status',
-                $request->status
-            );
-
+            $query->where('status', $request->status);
         }
 
-        $siswas = $query
-            ->latest()
-            ->get();
+        // =========================
+        // 🔥 SORTING FEATURE (NEW)
+        // =========================
+        $sort = $request->sort ?? 'created_at';
+        $order = $request->order ?? 'desc';
 
-        return view(
-            'admin.siswa',
-            compact('siswas')
-        );
+        $allowedSort = ['nama_anak', 'jenjang', 'status', 'created_at'];
+
+        if (!in_array($sort, $allowedSort)) {
+            $sort = 'created_at';
+        }
+
+        if (!in_array($order, ['asc', 'desc'])) {
+            $order = 'desc';
+        }
+
+        $query->orderBy($sort, $order);
+
+        // hasil akhir
+        $siswas = $query->latest()->get();
+
+        return view('admin.siswa', compact('siswas'));
     }
 
     // EXPORT PDF
