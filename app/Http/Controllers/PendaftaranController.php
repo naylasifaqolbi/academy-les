@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Siswa;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PendaftaranController extends Controller
 {
@@ -63,29 +64,47 @@ class PendaftaranController extends Controller
 
         ]);
 
-        // SIMPAN DATA PENDAFTARAN
-        Siswa::create([
+        DB::beginTransaction();
 
-            'user_id' => Auth::id(),
+        try {
 
-            'nama_anak' => $request->nama_anak,
-            'nama_orang_tua' => $request->nama_orang_tua,
-            'email' => $request->email,
-            'no_hp' => $request->no_hp,
-            'alamat' => $request->alamat,
-            'jenjang' => $request->jenjang,
-            'mata_pelajaran' => $request->mata_pelajaran,
-            'jenis_kelamin' => $request->jenis_kelamin,
+            // SIMPAN DATA PENDAFTARAN
+            Siswa::create([
 
-            // otomatis setelah daftar
-            'status' => 'pending',
-        ]);
+                'user_id' => Auth::id(),
 
-        // KEMBALI KE DASHBOARD USER
-        return redirect('/user/dashboard')
-            ->with(
-                'success',
-                'Pendaftaran berhasil dikirim!'
-            );
+                'nama_anak' => $request->nama_anak,
+                'nama_orang_tua' => $request->nama_orang_tua,
+                'email' => $request->email,
+                'no_hp' => $request->no_hp,
+                'alamat' => $request->alamat,
+                'jenjang' => $request->jenjang,
+                'mata_pelajaran' => $request->mata_pelajaran,
+                'jenis_kelamin' => $request->jenis_kelamin,
+
+                // otomatis setelah daftar
+                'status' => 'pending',
+            ]);
+
+            DB::commit();
+
+            // KEMBALI KE DASHBOARD USER
+            return redirect('/user/dashboard')
+                ->with(
+                    'success',
+                    'Pendaftaran berhasil dikirim!'
+                );
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return back()
+                ->with(
+                    'error',
+                    'Pendaftaran gagal disimpan!'
+                )
+                ->withInput();
+        }
     }
 }

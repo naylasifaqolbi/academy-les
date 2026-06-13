@@ -57,7 +57,7 @@
 
             </div>
 
-            <div class="mb-6">
+            <div class="mb-4">
 
                 <label class="block mb-2 font-medium">
                     Password
@@ -68,6 +68,23 @@
                     name="password"
                     required
                     class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-sky-500">
+
+            </div>
+
+            <!-- REMEMBER ME -->
+            <div class="mb-6 flex items-center">
+
+                <input
+                    type="checkbox"
+                    name="remember"
+                    id="remember"
+                    class="mr-2">
+
+                <label
+                    for="remember"
+                    class="text-gray-600">
+                    Remember Me
+                </label>
 
             </div>
 
