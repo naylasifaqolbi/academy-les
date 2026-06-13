@@ -120,6 +120,8 @@
                     @csrf
 
                     <button
+                        type="submit"
+                        onclick="return confirm('Apakah Anda yakin ingin logout?')"
                         class="px-4 py-2 rounded-xl shadow-sm transition"
                         style="
                             background:#D8EBCF;
