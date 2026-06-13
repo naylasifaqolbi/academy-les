@@ -118,9 +118,9 @@
     <br>
 
     <p style="text-align:right;">
-        Dicetak pada:
-        {{ date('d-m-Y H:i') }}
-    </p>
+    Dicetak pada:
+    {{ \Carbon\Carbon::now('Asia/Jakarta')->format('d-m-Y H:i') }} WIB
+</p>
 
 </body>
 

@@ -9,78 +9,136 @@
     @vite('resources/css/app.css')
 </head>
 
-<body class="bg-gray-100 min-h-screen">
+<body style="background-color:#F8F4FD;" class="min-h-screen">
 
-    <!-- NAVBAR -->
-    <nav class="bg-white shadow-md">
+<!-- NAVBAR -->
+<nav
+    class="shadow-sm border-b"
+    style="
+        background-color:#DDD0F3;
+        border-color:#CDBBEA;
+    ">
 
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
 
-            <a href="/" class="text-2xl font-bold text-sky-600">
-                🎓 Academy Les
+        <!-- LOGO -->
+        <a href="/"
+           class="text-2xl font-bold transition"
+           style="color:#7E66B8;">
+
+            🎓 Academy Les
+
+        </a>
+
+        <div class="flex items-center gap-4">
+
+            <!-- MENU -->
+            <a href="/"
+               class="font-medium transition"
+               style="color:#5F566D;"
+               onmouseover="this.style.color='#8B73C5'"
+               onmouseout="this.style.color='#5F566D'">
+
+                Home
+
             </a>
 
-            <div class="flex items-center gap-4">
+            <a href="/profile"
+               class="font-medium transition"
+               style="color:#5F566D;"
+               onmouseover="this.style.color='#8B73C5'"
+               onmouseout="this.style.color='#5F566D'">
 
-                <a href="/" class="hover:text-sky-600">
-                    Home
+                Profile Les
+
+            </a>
+
+            @guest
+
+                <!-- LOGIN -->
+                <a href="/login"
+                   class="px-4 py-2 rounded-xl shadow-sm transition"
+                   style="
+                        background:#D8EBCF;
+                        color:#4E7247;
+                   "
+                   onmouseover="this.style.background='#CBE4C2'"
+                   onmouseout="this.style.background='#D8EBCF'">
+
+                    Login
+
                 </a>
 
-                <a href="/profile" class="hover:text-sky-600">
-                    Profile Les
+                <!-- REGISTER -->
+                <a href="/register"
+                   class="px-4 py-2 rounded-xl shadow-sm transition"
+                   style="
+                        background:#CFE7C8;
+                        color:#4E7247;
+                   "
+                   onmouseover="this.style.background='#C2DDBA'"
+                   onmouseout="this.style.background='#CFE7C8'">
+
+                    Register
+
                 </a>
 
-                @guest
+            @endguest
 
-                    <a href="/login"
-                       class="bg-sky-600 text-white px-4 py-2 rounded-lg">
-                        Login
+            @auth
+
+                @if(Auth::user()->role == 'admin')
+
+                    <a href="/admin/dashboard"
+                       class="px-4 py-2 rounded-xl shadow-sm transition"
+                       style="
+                            background:#CFE7C8;
+                            color:#42683B;
+                       ">
+
+                        Dashboard
+
                     </a>
 
-                    <a href="/register"
-                       class="border border-sky-600 text-sky-600 px-4 py-2 rounded-lg">
-                        Register
+                @else
+
+                    <a href="/user/dashboard"
+                       class="px-4 py-2 rounded-xl shadow-sm transition"
+                       style="
+                            background:#CFE7C8;
+                            color:#42683B;
+                       ">
+
+                        Dashboard
+
                     </a>
 
-                @endguest
+                @endif
 
-                @auth
+                <!-- LOGOUT -->
+                <form action="/logout" method="POST">
+                    @csrf
 
-                    @if(Auth::user()->role == 'admin')
+                    <button
+                        class="px-4 py-2 rounded-xl shadow-sm transition"
+                        style="
+                            background:#D8EBCF;
+                            color:#4E7247;
+                        ">
 
-                        <a href="/admin/dashboard"
-                           class="bg-green-600 text-white px-4 py-2 rounded-lg">
-                            Dashboard
-                        </a>
+                        Logout
 
-                    @else
+                    </button>
 
-                        <a href="/user/dashboard"
-                           class="bg-green-600 text-white px-4 py-2 rounded-lg">
-                            Dashboard
-                        </a>
+                </form>
 
-                    @endif
-
-                    <form action="/logout" method="POST">
-                        @csrf
-
-                        <button
-                            class="bg-red-500 text-white px-4 py-2 rounded-lg">
-
-                            Logout
-
-                        </button>
-
-                    </form>
-
-                @endauth
-
-            </div>
+            @endauth
 
         </div>
 
-    </nav>
+    </div>
+
+</nav>
 
     <!-- CONTENT -->
     <main>
@@ -88,39 +146,75 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-slate-800 text-white mt-20">
+    <footer
+        class="mt-20 border-t"
+        style="
+            background-color:#F7E7B4;
+            color:#5F566D;
+            border-color:#E8D59C;
+        ">
 
         <div class="max-w-7xl mx-auto px-6 py-10">
 
             <div class="grid md:grid-cols-3 gap-8">
 
+                <!-- ABOUT -->
                 <div>
-                    <h3 class="font-bold text-xl mb-3">
+
+                    <h3 class="font-bold text-xl mb-3"
+                        style="color:#8B73C5;">
+
                         Academy Les
+
                     </h3>
 
                     <p>
                         Bimbingan belajar untuk siswa TK, SD, dan SMP.
                     </p>
+
                 </div>
 
+                <!-- KONTAK -->
                 <div>
-                    <h3 class="font-bold text-xl mb-3">
+
+                    <h3 class="font-bold text-xl mb-3"
+                        style="color:#5E8A55;">
+
                         Kontak
+
                     </h3>
 
                     <p>📞 08xxxxxxxxxx</p>
                     <p>📧 academyles@gmail.com</p>
+
                 </div>
 
+                <!-- JAM -->
                 <div>
-                    <h3 class="font-bold text-xl mb-3">
+
+                    <h3 class="font-bold text-xl mb-3"
+                        style="color:#B38D45;">
+
                         Jam Operasional
+
                     </h3>
 
                     <p>Senin - Jumat : 13.00 - 20.00</p>
                     <p>Sabtu : 08.00 - 15.00</p>
+
                 </div>
+
+            </div>
+
+            <!-- COPYRIGHT -->
+            <div
+                class="border-t mt-8 pt-5 text-center"
+                style="
+                    border-color:rgba(95,86,109,0.12);
+                    color:#7B738A;
+                ">
+
+                © 2026 Academy Les — Belajar Jadi Lebih Menyenangkan ✨
 
             </div>
 
