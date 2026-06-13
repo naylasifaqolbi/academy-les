@@ -8,13 +8,9 @@
 @endphp
 
 @if(session('success'))
-
 <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-2xl mb-6 shadow-sm">
-
     {{ session('success') }}
-
 </div>
-
 @endif
 
 <style>
@@ -28,11 +24,8 @@
     --text:#4F465E;
 }
 
-body{
-    background:#F6F4FB;
-}
+body{ background:#F6F4FB; }
 
-/* card */
 .soft-card{
     background:rgba(255,255,255,.7);
     backdrop-filter:blur(18px);
@@ -41,19 +34,16 @@ body{
     box-shadow:0 10px 30px rgba(143,116,204,.08);
 }
 
-/* header */
 .soft-header{
     background:linear-gradient(135deg,var(--lavender-soft),white);
     border-radius:28px;
 }
 
-/* table header */
 .table-head{
     background:linear-gradient(135deg,var(--lavender),var(--lavender-deep));
     color:white;
 }
 
-/* SORT LINK FIX (INI PENTING) */
 .sort-link{
     color:white;
     font-weight:600;
@@ -61,15 +51,8 @@ body{
     align-items:center;
     justify-content:center;
     gap:6px;
-    transition:.2s;
 }
 
-.sort-link:hover{
-    color:#F8EED0;
-    transform:translateY(-1px);
-}
-
-/* badge */
 .badge-yellow{background:var(--yellow);color:#7A5A00;}
 .badge-green{background:var(--green);color:#2E6B3A;}
 .badge-red{background:#F8D7DA;color:#842029;}
@@ -77,222 +60,219 @@ body{
 tr:hover{
     background:rgba(238,229,250,.35);
 }
-
-.btn-action{
-    border-radius:12px;
-    font-size:12px;
-}
 </style>
 
 <!-- HEADER -->
 <div class="soft-header p-8 mb-8 shadow">
-
-    <h1 class="text-3xl font-bold text-[var(--text)]">
-        Data Siswa
-    </h1>
-
-    <p class="text-gray-500 mt-2">
-        Kelola seluruh data pendaftaran siswa Academy Les.
-    </p>
-
+    <h1 class="text-3xl font-bold text-[var(--text)]">Data Siswa</h1>
+    <p class="text-gray-500 mt-2">Kelola seluruh data pendaftaran siswa Academy Les.</p>
 </div>
 
 <!-- SEARCH -->
 <div class="soft-card p-6 mb-8">
 
-    <form method="GET" action="/admin/siswa">
+<form method="GET" action="/admin/siswa">
 
-        <div class="grid md:grid-cols-4 gap-4">
+<div class="grid md:grid-cols-4 gap-4">
 
-            <input type="text"
-                   name="search"
-                   value="{{ request('search') }}"
-                   placeholder="Cari nama siswa..."
-                   class="border border-purple-100 rounded-2xl p-3">
+    <input type="text"
+           name="search"
+           value="{{ request('search') }}"
+           placeholder="Cari nama siswa..."
+           class="border border-purple-100 rounded-2xl p-3">
 
-            <select name="status"
-                    class="border border-purple-100 rounded-2xl p-3">
+    <select name="status"
+            class="border border-purple-100 rounded-2xl p-3">
 
-                <option value="">Semua Status</option>
-                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                <option value="diterima" {{ request('status') == 'diterima' ? 'selected' : '' }}>Diterima</option>
-                <option value="ditolak" {{ request('status') == 'ditolak' ? 'selected' : '' }}>Ditolak</option>
+        <option value="">Semua Status</option>
+        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+        <option value="diterima" {{ request('status') == 'diterima' ? 'selected' : '' }}>Diterima</option>
+        <option value="ditolak" {{ request('status') == 'ditolak' ? 'selected' : '' }}>Ditolak</option>
 
-            </select>
+    </select>
 
-            <button type="submit"
-                    class="bg-[var(--lavender)] hover:bg-[var(--lavender-deep)] text-[#3F3558] rounded-2xl px-5 py-3 transition">
+    <button type="submit"
+            class="bg-[var(--lavender)] hover:bg-[var(--lavender-deep)] text-[#3F3558] rounded-2xl px-5 py-3 transition">
+        Cari
+    </button>
 
-                Cari
+    <a href="/admin/siswa"
+       class="bg-gray-100 hover:bg-gray-200 rounded-2xl px-5 py-3 text-center">
+        Reset
+    </a>
 
-            </button>
+</div>
 
-            <a href="/admin/siswa"
-               class="bg-gray-100 hover:bg-gray-200 rounded-2xl px-5 py-3 text-center">
-
-                Reset
-
-            </a>
-
-        </div>
-
-    </form>
+</form>
 
 </div>
 
 <!-- TABLE -->
 <div class="soft-card overflow-hidden">
 
-    <div class="table-head px-6 py-4 flex justify-between items-center">
+<div class="table-head px-6 py-4 flex justify-between items-center">
 
-        <h2 class="text-xl font-semibold">
-            Data Pendaftaran Siswa
-        </h2>
+    <h2 class="text-xl font-semibold">Data Pendaftaran Siswa</h2>
 
-        <span class="bg-white text-[var(--lavender-deep)] px-4 py-2 rounded-2xl font-semibold shadow">
-            Total: {{ $siswas->count() }}
-        </span>
+    <span class="bg-white text-[var(--lavender-deep)] px-4 py-2 rounded-2xl font-semibold shadow">
+        Total: {{ $siswas->count() }}
+    </span>
 
-    </div>
+</div>
 
-    <div class="overflow-x-auto">
+<div class="overflow-x-auto">
 
-        <table class="w-full">
+<table class="w-full">
 
-            <thead class="table-head">
+<thead class="table-head">
+<tr>
 
-                <tr>
+    <th class="p-4">No</th>
 
-                    <th class="p-4">No</th>
+    <!-- SORT NAMA -->
+    <th class="p-4">
+        <a href="{{ request()->fullUrlWithQuery([
+            'sort' => 'nama_anak',
+            'order' => ($sort === 'nama_anak' && $order === 'asc') ? 'desc' : 'asc'
+        ]) }}"
+        class="sort-link">
 
-                    <!-- SORT FIXED -->
-                    <th class="p-4">
-                        <a href="{{ request()->fullUrlWithQuery([
-                            'sort' => 'nama_anak',
-                            'order' => ($sort === 'nama_anak' && $order === 'asc') ? 'desc' : 'asc'
-                        ]) }}"
-                        class="sort-link">
+            Nama Anak
+            @if($sort === 'nama_anak')
+                {!! $order === 'asc' ? '▲' : '▼' !!}
+            @endif
 
-                            Nama Anak
+        </a>
+    </th>
 
-                            @if($sort === 'nama_anak')
-                                {!! $order === 'asc' ? '▲' : '▼' !!}
-                            @endif
+    <!-- SORT JENJANG -->
+    <th class="p-4">
+        <a href="{{ request()->fullUrlWithQuery([
+            'sort' => 'jenjang',
+            'order' => ($sort === 'jenjang' && $order === 'asc') ? 'desc' : 'asc'
+        ]) }}"
+        class="sort-link">
 
-                        </a>
-                    </th>
+            Jenjang
+            @if($sort === 'jenjang')
+                {!! $order === 'asc' ? '▲' : '▼' !!}
+            @endif
 
-                    <th class="p-4">
-                        <a href="{{ request()->fullUrlWithQuery([
-                            'sort' => 'jenjang',
-                            'order' => ($sort === 'jenjang' && $order === 'asc') ? 'desc' : 'asc'
-                        ]) }}"
-                        class="sort-link">
+        </a>
+    </th>
 
-                            Jenjang
+    <th class="p-4">Mata Pelajaran</th>
 
-                            @if($sort === 'jenjang')
-                                {!! $order === 'asc' ? '▲' : '▼' !!}
-                            @endif
+    <!-- SORT STATUS -->
+    <th class="p-4">
+        <a href="{{ request()->fullUrlWithQuery([
+            'sort' => 'status',
+            'order' => ($sort === 'status' && $order === 'asc') ? 'desc' : 'asc'
+        ]) }}"
+        class="sort-link">
 
-                        </a>
-                    </th>
+            Status
+            @if($sort === 'status')
+                {!! $order === 'asc' ? '▲' : '▼' !!}
+            @endif
 
-                    <th class="p-4">Mata Pelajaran</th>
+        </a>
+    </th>
 
-                    <th class="p-4">
-                        <a href="{{ request()->fullUrlWithQuery([
-                            'sort' => 'status',
-                            'order' => ($sort === 'status' && $order === 'asc') ? 'desc' : 'asc'
-                        ]) }}"
-                        class="sort-link">
+    <th class="p-4">Aksi</th>
 
-                            Status
+</tr>
+</thead>
 
-                            @if($sort === 'status')
-                                {!! $order === 'asc' ? '▲' : '▼' !!}
-                            @endif
+<tbody>
 
-                        </a>
-                    </th>
+@forelse($siswas as $siswa)
 
-                    <th class="p-4">Aksi</th>
+<tr class="border-b">
 
-                </tr>
+    <td class="p-4 text-center">{{ $loop->iteration }}</td>
+    <td class="p-4 font-medium">{{ $siswa->nama_anak }}</td>
+    <td class="p-4">{{ $siswa->jenjang }}</td>
+    <td class="p-4">{{ $siswa->mata_pelajaran }}</td>
 
-            </thead>
+    <td class="p-4">
 
-            <tbody>
+        @if($siswa->status == 'pending')
+            <span class="badge-yellow px-3 py-1 rounded-full text-sm">Pending</span>
+        @elseif($siswa->status == 'diterima')
+            <span class="badge-green px-3 py-1 rounded-full text-sm">Diterima</span>
+        @else
+            <span class="badge-red px-3 py-1 rounded-full text-sm">Ditolak</span>
+        @endif
 
-                @forelse($siswas as $siswa)
+    </td>
 
-                <tr class="border-b">
+    <td class="p-4">
 
-                    <td class="p-4 text-center">{{ $loop->iteration }}</td>
+        <div class="flex flex-wrap gap-2">
 
-                    <td class="p-4 font-medium">{{ $siswa->nama_anak }}</td>
+            <a href="/admin/detail/{{ $siswa->id }}"
+               class="bg-[#EEE5FA] px-3 py-2 rounded-lg text-sm">
+                Detail
+            </a>
 
-                    <td class="p-4">{{ $siswa->jenjang }}</td>
+            <a href="/admin/edit/{{ $siswa->id }}"
+               class="bg-[#F8EED0] px-3 py-2 rounded-lg text-sm">
+                Edit
+            </a>
 
-                    <td class="p-4">{{ $siswa->mata_pelajaran }}</td>
+            @if($siswa->status == 'pending')
 
-                    <td class="p-4">
+            <form action="/admin/status/{{ $siswa->id }}" method="POST">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="status" value="diterima">
 
-                        @if($siswa->status == 'pending')
-                            <span class="badge-yellow px-3 py-1 rounded-full text-sm">Pending</span>
-                        @elseif($siswa->status == 'diterima')
-                            <span class="badge-green px-3 py-1 rounded-full text-sm">Diterima</span>
-                        @else
-                            <span class="badge-red px-3 py-1 rounded-full text-sm">Ditolak</span>
-                        @endif
+                <button class="bg-green-100 text-green-700 px-3 py-2 rounded-lg text-sm">
+                    Terima
+                </button>
+            </form>
 
-                    </td>
+            <form action="/admin/status/{{ $siswa->id }}" method="POST">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="status" value="ditolak">
 
-                    <td class="p-4">
+                <button class="bg-red-100 text-red-700 px-3 py-2 rounded-lg text-sm">
+                    Tolak
+                </button>
+            </form>
 
-                        <div class="flex flex-wrap gap-2">
+            @endif
 
-                            <a href="/admin/detail/{{ $siswa->id }}"
-                               class="bg-[#EEE5FA] px-3 py-2 rounded-lg text-sm">
-                                Detail
-                            </a>
+            <form action="/admin/delete/{{ $siswa->id }}" method="POST">
+                @csrf
+                @method('DELETE')
 
-                            <a href="/admin/edit/{{ $siswa->id }}"
-                               class="bg-[#F8EED0] px-3 py-2 rounded-lg text-sm">
-                                Edit
-                            </a>
+                <button class="bg-red-100 text-red-600 px-3 py-2 rounded-lg text-sm">
+                    Hapus
+                </button>
+            </form>
 
-                            <form action="/admin/delete/{{ $siswa->id }}" method="POST">
-                                @csrf
-                                @method('DELETE')
+        </div>
 
-                                <button class="bg-red-100 text-red-600 px-3 py-2 rounded-lg text-sm">
-                                    Hapus
-                                </button>
+    </td>
 
-                            </form>
+</tr>
 
-                        </div>
+@empty
+<tr>
+    <td colspan="6" class="text-center p-8 text-gray-500">
+        Belum ada data siswa
+    </td>
+</tr>
+@endforelse
 
-                    </td>
+</tbody>
 
-                </tr>
+</table>
 
-                @empty
-
-                <tr>
-                    <td colspan="6" class="text-center p-8 text-gray-500">
-                        Belum ada data siswa
-                    </td>
-                </tr>
-
-                @endforelse
-
-            </tbody>
-
-        </table>
-
-    </div>
+</div>
 
 </div>
 
